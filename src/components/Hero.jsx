@@ -35,7 +35,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center px-6 pt-24 pb-32 overflow-hidden"
     >
       {/* 3D Globe — sits behind everything as ambient background */}
       <motion.div
@@ -57,7 +57,7 @@ export default function Hero() {
         {/* Terminal-Style Intro Card */}
         <motion.div
           variants={child}
-          className="mb-8 rounded-xl bg-dark-light/80 backdrop-blur-md border border-dark-lighter p-5 font-mono text-sm overflow-hidden"
+          className="mb-8 rounded-xl bg-dark-light/80 backdrop-blur-md border border-dark-lighter p-5 font-mono text-sm overflow-hidden shadow-lg shadow-dark/50"
         >
           {/* Terminal Header */}
           <div className="flex items-center gap-2 mb-4 pb-3 border-b border-dark-lighter">
@@ -79,7 +79,7 @@ export default function Hero() {
               <span className="text-yellow-300">'Narasingh S Jadhav'</span>,
             </p>
             <p className="pl-6">
-              <span className="text-gray-500">role:</span>{" "}
+              <span className="text-gray-500">aspirations:</span>{" "}
               <span className="text-yellow-300">'Software Engineer'</span>,
             </p>
             <p className="pl-6">
@@ -108,13 +108,13 @@ export default function Hero() {
           variants={child}
           className="mt-3 text-xl sm:text-2xl md:text-3xl font-bold h-10"
         >
-          <span className="text-gray-500">I am a </span>
+          <span className="text-gray-500">I am </span>
           <TypeAnimation
             sequence={[
-              "Software Engineer.", 2000,
-              "Data Pipeline Builder.", 2000,
-              "AI & ML Explorer.", 2000,
-              "Problem Solver.", 2000,
+              "an aspiring Software Engineer.", 2000,
+              "a Data Pipeline Builder.", 2000,
+              "an AI & ML Explorer.", 2000,
+              "a Problem Solver.", 2000,
             ]}
             wrapper="span"
             speed={40}
@@ -171,19 +171,21 @@ export default function Hero() {
           <div className="hidden sm:block w-px h-8 bg-dark-lighter mx-2" />
 
           {/* Quick Social Icons */}
-          {quickLinks.map(({ icon, url, label }) => (
-            <a
-              key={label}
-              href={url}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={label}
-              data-cursor="pointer"
-              className="text-gray-500 hover:text-accent text-xl transition-all duration-200 hover:-translate-y-1"
-            >
-              {icon}
-            </a>
-          ))}
+          <div className="flex items-center gap-4 ml-2 sm:ml-0">
+            {quickLinks.map(({ icon, url, label }) => (
+              <a
+                key={label}
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={label}
+                data-cursor="pointer"
+                className="text-gray-500 hover:text-accent text-xl transition-all duration-200 hover:-translate-y-1"
+              >
+                {icon}
+              </a>
+            ))}
+          </div>
         </motion.div>
       </motion.div>
 
@@ -193,7 +195,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 hover:text-accent transition-colors"
+        className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 hover:text-accent transition-colors"
         data-cursor="pointer"
       >
         <span className="text-xs font-mono">scroll down</span>
