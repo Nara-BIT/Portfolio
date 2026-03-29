@@ -44,7 +44,9 @@ export default function Projects() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="group relative rounded-xl p-6 md:p-8 bg-dark-light border border-dark-lighter hover:border-accent/30 transition-all duration-300 overflow-hidden"
+              onClick={() => window.open(project.github, "_blank", "noopener,noreferrer")}
+              data-cursor="pointer"
+              className="group cursor-pointer relative rounded-xl p-6 md:p-8 bg-dark-light border border-dark-lighter hover:border-accent/30 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
               {/* Hover glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -71,7 +73,7 @@ export default function Projects() {
                         href={project.github}
                         target="_blank"
                         rel="noreferrer"
-                        data-cursor="pointer"
+                        onClick={(e) => e.stopPropagation()} /* Prevents double click bug */
                         className="hover:text-accent transition-colors text-lg"
                         aria-label="GitHub"
                       >
@@ -83,7 +85,7 @@ export default function Projects() {
                         href={project.live}
                         target="_blank"
                         rel="noreferrer"
-                        data-cursor="pointer"
+                        onClick={(e) => e.stopPropagation()}
                         className="hover:text-accent transition-colors text-lg"
                         aria-label="Live Demo"
                       >
@@ -103,7 +105,7 @@ export default function Projects() {
                   {project.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 rounded-full text-xs font-mono bg-dark border border-dark-lighter text-accent/80 hover:border-accent/50 hover:text-accent transition-colors duration-200"
+                      className="px-3 py-1 rounded-full text-xs font-mono bg-dark border border-dark-lighter text-accent/80 group-hover:border-accent/50 group-hover:text-accent transition-colors duration-200"
                     >
                       {tech}
                     </span>
@@ -115,8 +117,7 @@ export default function Projects() {
                   <span
                     className="w-3 h-3 rounded-full inline-block"
                     style={{
-                      backgroundColor:
-                        langColor[project.language] || "#8892b0",
+                      backgroundColor: langColor[project.language] || "#8892b0",
                     }}
                   />
                   <span>{project.language}</span>
@@ -147,7 +148,9 @@ export default function Projects() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className="group flex flex-col justify-between rounded-xl p-6 bg-dark-light border border-dark-lighter hover:border-accent/30 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+                  onClick={() => window.open(project.github, "_blank", "noopener,noreferrer")}
+                  data-cursor="pointer"
+                  className="group cursor-pointer flex flex-col justify-between rounded-xl p-6 bg-dark-light border border-dark-lighter hover:border-accent/30 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
                 >
                   {/* Hover glow */}
                   <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -162,7 +165,7 @@ export default function Projects() {
                             href={project.github}
                             target="_blank"
                             rel="noreferrer"
-                            data-cursor="pointer"
+                            onClick={(e) => e.stopPropagation()}
                             className="hover:text-accent transition-colors"
                             aria-label="GitHub"
                           >
@@ -174,7 +177,7 @@ export default function Projects() {
                             href={project.live}
                             target="_blank"
                             rel="noreferrer"
-                            data-cursor="pointer"
+                            onClick={(e) => e.stopPropagation()}
                             className="hover:text-accent transition-colors"
                             aria-label="Live Demo"
                           >
