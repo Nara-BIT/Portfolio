@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import { leetcodeStats, codeforcesStats } from "../data/constants";
-import { SiLeetcode, SiCodeforces } from "react-icons/si";
+import { SiLeetcode } from "react-icons/si";
+import { FaCode } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 
 /* ─── Animated Counter ─── */
@@ -106,24 +107,9 @@ export default function CodingProfiles() {
             </div>
 
             <div className="space-y-3">
-              <DiffBar
-                label="Easy"
-                value={easy}
-                total={total}
-                color="#00b8a3"
-              />
-              <DiffBar
-                label="Medium"
-                value={medium}
-                total={total}
-                color="#ffc01e"
-              />
-              <DiffBar
-                label="Hard"
-                value={hard}
-                total={total}
-                color="#ef4743"
-              />
+              <DiffBar label="Easy" value={easy} total={total} color="#00b8a3" />
+              <DiffBar label="Medium" value={medium} total={total} color="#ffc01e" />
+              <DiffBar label="Hard" value={hard} total={total} color="#ef4743" />
             </div>
 
             <a
@@ -146,7 +132,7 @@ export default function CodingProfiles() {
             className="rounded-xl p-6 bg-dark-light border border-dark-lighter hover:border-accent/30 transition-colors duration-300 flex flex-col"
           >
             <div className="flex items-center gap-3 mb-6">
-              <SiCodeforces className="text-3xl text-[#1f8acb]" />
+              <FaCode className="text-3xl text-[#1f8acb]" />
               <div>
                 <h3 className="text-lg font-semibold text-gray-200">
                   Codeforces
@@ -226,9 +212,7 @@ export default function CodingProfiles() {
                 key={title}
                 className="p-4 rounded-lg bg-dark border border-dark-lighter hover:border-accent/20 transition-colors"
               >
-                <p className="font-semibold text-accent text-sm mb-1">
-                  {title}
-                </p>
+                <p className="font-semibold text-accent text-sm mb-1">{title}</p>
                 <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
               </div>
             ))}

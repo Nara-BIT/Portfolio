@@ -1,68 +1,74 @@
 # 🚀 Narasingh S Jadhav — Developer Portfolio
 
-A **modern, interactive, and visually stunning** personal portfolio built with
+A modern, interactive, and visually stunning personal portfolio built with
 React, Three.js, Framer Motion, and Tailwind CSS.
-
-![Portfolio Preview](https://via.placeholder.com/1200x630/0a192f/64ffda?text=Portfolio+Preview)
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| 🎨 Dark theme with neon accents | Premium dark navy palette with cyan / purple glow |
-| 🌐 3D interactive element | Floating wireframe icosahedron powered by Three.js |
-| ✨ Particle background | Lightweight canvas-based particle system with mouse interaction |
-| 🖱️ Custom cursor | Dot + ring cursor with hover-aware scaling (desktop only) |
-| 💫 Smooth animations | Scroll-triggered animations with Framer Motion |
-| 📱 Fully responsive | Mobile-first design, works beautifully on all screen sizes |
-| 🔗 GitHub API integration | Dynamically fetches and displays repositories |
-| 📊 LeetCode stats | Animated counters and difficulty breakdown bars |
-| ✉️ Contact form | Mailto-based form with toast notifications |
-| ⚡ Blazing fast | Vite build, code-split 3D, optimized assets |
+- 🎨 Dark theme with neon cyan accents
+- 🌐 Interactive 3D globe that follows your mouse cursor
+- ✨ Particle background with mouse interaction
+- 🖱️ Custom animated cursor (desktop only)
+- 💫 Smooth scroll-triggered animations
+- 💻 Terminal-style hero introduction
+- 📱 Fully responsive (mobile + tablet + desktop)
+- 📊 LeetCode stats with animated counters
+- 🏆 Achievements and hackathon highlights
+- ✉️ Contact form with email integration
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework:** React 18 + Vite
-- **Styling:** Tailwind CSS 3.4
-- **Animations:** Framer Motion 11
-- **3D Graphics:** Three.js + React Three Fiber + Drei
-- **Icons:** React Icons
-- **Typing Effect:** react-type-animation
-- **Notifications:** react-hot-toast
+| Category | Technologies |
+|----------|-------------|
+| Framework | React 18 + Vite |
+| Styling | Tailwind CSS 3.4 |
+| Animations | Framer Motion 11 |
+| 3D Graphics | Three.js + React Three Fiber + Drei |
+| Icons | React Icons |
+| Typing Effect | react-type-animation |
+| Notifications | react-hot-toast |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-src/
-├── components/
-│   ├── About.jsx
-│   ├── Aspirations.jsx
-│   ├── CodingProfiles.jsx
-│   ├── Contact.jsx
-│   ├── CustomCursor.jsx
-│   ├── Footer.jsx
-│   ├── Hero.jsx
-│   ├── Loader.jsx
-│   ├── Navbar.jsx
-│   ├── ParticleCanvas.jsx
-│   ├── Projects.jsx
-│   ├── Scene3D.jsx
-│   ├── SectionHeading.jsx
-│   ├── Skills.jsx
-│   └── SocialSidebar.jsx
-├── data/
-│   └── constants.js
-├── hooks/
-│   └── useGithubRepos.js
-├── App.jsx
-├── index.css
-└── main.jsx
+nara-portfolio/
+├── public/
+│   ├── favicon.svg
+│   └── resume.pdf
+├── src/
+│   ├── components/
+│   │   ├── About.jsx
+│   │   ├── Aspirations.jsx
+│   │   ├── CodingProfiles.jsx
+│   │   ├── Contact.jsx
+│   │   ├── CustomCursor.jsx
+│   │   ├── Footer.jsx
+│   │   ├── Hero.jsx
+│   │   ├── Loader.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── ParticleCanvas.jsx
+│   │   ├── Projects.jsx
+│   │   ├── Scene3D.jsx
+│   │   ├── SectionHeading.jsx
+│   │   ├── Skills.jsx
+│   │   └── SocialSidebar.jsx
+│   ├── data/
+│   │   └── constants.js
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── index.html
+├── package.json
+├── postcss.config.js
+├── tailwind.config.js
+├── vite.config.js
+└── README.md
 ```
 
 ---
@@ -71,14 +77,16 @@ src/
 
 ### Prerequisites
 
-- **Node.js** ≥ 18
-- **npm** ≥ 9 (or yarn / pnpm)
+- Node.js 18 or higher
+- npm 9 or higher
 
 ### Installation
 
 ```bash
 # Clone the repository
 git clone https://github.com/Nara-BIT/nara-portfolio.git
+
+# Navigate into the project
 cd nara-portfolio
 
 # Install dependencies
@@ -88,86 +96,61 @@ npm install
 npm run dev
 ```
 
-The app will be running at **http://localhost:5173**
+The app will be running at `http://localhost:5173`
 
 ### Build for Production
 
 ```bash
 npm run build
-npm run preview   # preview the production build locally
+npm run preview
 ```
 
 ---
 
-## 🌐 Deployment
+## 🌐 Deployment (Vercel — Recommended)
 
-### Vercel (Recommended)
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) and sign up with GitHub
+3. Click **Add New Project** and import `nara-portfolio`
+4. Framework Preset will auto-detect as **Vite**
+5. Click **Deploy**
+6. Your site will be live at `your-project.vercel.app`
 
-1. Push the repo to GitHub.
-2. Go to [vercel.com](https://vercel.com), import the repository.
-3. Framework preset: **Vite**.
-4. Click **Deploy**.
-
-### Netlify
-
-1. Push the repo to GitHub.
-2. Go to [netlify.com](https://netlify.com), import the repository.
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Click **Deploy**.
-
-### GitHub Pages
-
-```bash
-npm install -D gh-pages
-
-# Add to package.json scripts:
-# "deploy": "gh-pages -d dist"
-
-npm run build
-npm run deploy
-```
+Every future `git push` will automatically redeploy.
 
 ---
 
-## 📸 Screenshots
+## ⚙️ Customization Guide
 
-| Hero Section | Projects |
-|:---:|:---:|
-| ![Hero](https://via.placeholder.com/600x400/0a192f/64ffda?text=Hero+Section) | ![Projects](https://via.placeholder.com/600x400/0a192f/64ffda?text=Projects) |
-
-| Skills | Coding Profiles |
-|:---:|:---:|
-| ![Skills](https://via.placeholder.com/600x400/0a192f/64ffda?text=Skills) | ![Coding](https://via.placeholder.com/600x400/0a192f/64ffda?text=LeetCode+Stats) |
-
----
-
-## ⚙️ Customization
-
-| What to change | Where |
+| What to change | Where to edit |
 |---|---|
-| Personal info, skills, stats | `src/data/constants.js` |
-| GitHub username | `src/hooks/useGithubRepos.js` |
-| Email address | `src/components/SocialSidebar.jsx` & `Contact.jsx` |
-| Colors & fonts | `tailwind.config.js` & `src/index.css` |
-| 3D geometry | `src/components/Scene3D.jsx` |
-| Resume PDF | `public/resume.pdf` |
+| Personal info and skills | `src/data/constants.js` |
+| Hero section text | `src/components/Hero.jsx` |
+| About section text | `src/components/About.jsx` |
+| Projects list | `src/data/constants.js` → `projects` array |
+| LeetCode stats | `src/data/constants.js` → `leetcodeStats` |
+| Codeforces handle | `src/data/constants.js` → `codeforcesStats` |
+| Email address | `src/components/SocialSidebar.jsx` and `Contact.jsx` |
+| Resume PDF | Replace `public/resume.pdf` with your file |
+| Colors and fonts | `tailwind.config.js` |
+| 3D globe behavior | `src/components/Scene3D.jsx` |
+
+---
+
+## 🔗 Links
+
+- **Portfolio:** [Live Site](https://nara-portfolio.vercel.app)
+- **GitHub:** [Nara-BIT](https://github.com/Nara-BIT)
+- **LinkedIn:** [Narasingh S Jadhav](https://www.linkedin.com/in/narasingh-s-jadhav-0031a7245/)
+- **LeetCode:** [BrawlyNara007](https://leetcode.com/u/BrawlyNara007/)
+- **Codeforces:** [Nara_on_Run](https://codeforces.com/profile/Nara_on_Run)
+- **Instagram:** [narasinghjadhav03](https://www.instagram.com/narasinghjadhav03/)
 
 ---
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-## 🤝 Contact
-
-- **GitHub:** [Nara-BIT](https://github.com/Nara-BIT)
-- **LinkedIn:** [Narasingh S Jadhav](https://www.linkedin.com/in/narasingh-s-jadhav-0031a7245/)
-- **LeetCode:** [BrawlyNara007](https://leetcode.com/u/BrawlyNara007/)
-- **Instagram:** [@narasinghjadhav03](https://www.instagram.com/narasinghjadhav03/)
-- **Portfolio Repo:** [nara-portfolio](https://github.com/Nara-BIT/nara-portfolio)
+This project is open source under the [MIT License](LICENSE).
 
 ---
 

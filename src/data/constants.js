@@ -1,9 +1,6 @@
-import {
-  FaGithub,
-  FaLinkedinIn,
-  FaInstagram,
-} from "react-icons/fa";
-import { SiLeetcode, SiCodeforces } from "react-icons/si";
+import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa";
+import { SiLeetcode } from "react-icons/si";
+import { FaCode } from "react-icons/fa";
 
 /* ─── Navigation ─── */
 export const navLinks = [
@@ -14,7 +11,7 @@ export const navLinks = [
   { name: "Contact", href: "#contact" },
 ];
 
-/* ─── Social links ─── */
+/* ─── Social links (using safe, universally available icons) ─── */
 export const socials = [
   {
     name: "GitHub",
@@ -34,7 +31,7 @@ export const socials = [
   {
     name: "Codeforces",
     url: "https://codeforces.com/profile/Nara_on_Run",
-    Icon: SiCodeforces,
+    Icon: FaCode,
   },
   {
     name: "Instagram",
@@ -109,7 +106,7 @@ export const projects = [
       "Built an intelligent self-healing agent that monitors CI/CD pipelines in real-time, using LLMs (LangChain + OpenAI) to automatically diagnose error logs and suggest immediate code fixes. Reduced manual troubleshooting time by automating the feedback loop between pipeline failures and remediation. Built at PWxRIFT 2026 hackathon.",
     techStack: ["Python", "OpenAI", "LangChain", "CI/CD"],
     language: "Python",
-    github: "https://github.com/Nara-BIT",
+    github: "https://github.com/Nara-BIT/Autonomous_CI-CD_Healing_Agent",
     live: null,
     featured: true,
   },
@@ -131,7 +128,7 @@ export const projects = [
       "Built a real-time data pipeline in Docker to capture, process, and analyze live edits happening across Wikipedia globally. Used Apache Kafka and Spark Streaming to handle continuous text streams, applying NLP on the fly to score sentiment. Flowed processed data into PostgreSQL and built a live Streamlit dashboard to visualize trends.",
     techStack: ["Python", "Kafka", "Spark", "PostgreSQL", "Streamlit", "Docker"],
     language: "Python",
-    github: "https://github.com/Nara-BIT",
+    github: "https://github.com/Nara-BIT/Wikipedia-Sentiment-Analysis",
     live: null,
     featured: true,
   },
@@ -142,7 +139,7 @@ export const projects = [
       "A real-time voting platform enabling users to create polls, cast votes, and see live results update instantly. Built with a focus on concurrency handling, real-time data synchronization, and a clean interactive UI for seamless user experience.",
     techStack: ["JavaScript", "React", "Node.js", "MongoDB", "Socket.io"],
     language: "JavaScript",
-    github: "https://github.com/Nara-BIT",
+    github: "https://github.com/Nara-BIT/Live_Voting_System",
     live: null,
     featured: false,
   },
@@ -153,7 +150,7 @@ export const projects = [
       "Data analysis and visualization project exploring blood donation patterns, donor demographics, and prediction models. Used Python data science libraries to clean, analyze, and present actionable insights through interactive charts and statistical summaries.",
     techStack: ["Python", "Pandas", "NumPy", "Matplotlib", "Seaborn"],
     language: "Python",
-    github: "https://github.com/Nara-BIT",
+    github: "https://github.com/Nara-BIT/Blood-Donation-Anlysis",
     live: null,
     featured: false,
   },
