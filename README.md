@@ -35,8 +35,11 @@ A modern, interactive, and visually stunning personal portfolio website built wi
 
 ## 🏗️ Project Structure
 nara-portfolio/
+
 │
+
 ├── public/
+
 │ └── vite.svg
 │
 ├── src/
