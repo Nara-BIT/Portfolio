@@ -19,8 +19,9 @@ const child = {
 export default function Hero() {
   return (
     <section
-      id="hero"
-      className="relative min-h-screen flex items-center px-6 pt-20 overflow-hidden"
+    id="hero"
+    // Added pb-32 for mobile to create space for the scroll indicator
+    className="relative min-h-[100dvh] flex items-center px-6 pt-20 pb-32 md:pb-0 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-8 lg:gap-4">
         {/* Text */}
@@ -77,7 +78,7 @@ export default function Hero() {
             solving algorithmic challenges.
           </motion.p>
 
-          <motion.div variants={child} className="flex flex-wrap gap-4 mt-8">
+          <motion.div variants={child} className="flex flex-wrap gap-4 mt-6 md:mt-8">
             <a
               href="#projects"
               data-cursor="pointer"
@@ -113,7 +114,8 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 hover:text-accent transition-colors"
+        // Changed 'flex' to 'hidden md:flex'
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-gray-500 hover:text-accent transition-colors"
         data-cursor="pointer"
       >
         <span className="text-xs font-mono">scroll</span>
