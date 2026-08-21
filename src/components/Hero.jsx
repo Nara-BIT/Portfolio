@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
-import Scene3D from "./Scene3D";
 import { FiArrowDown } from "react-icons/fi";
 
 const container = {
@@ -85,14 +84,29 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* 3D Scene — Right */}
+        {/* Portrait — Right */}
         <motion.div
           className="relative h-[400px] sm:h-[500px] lg:h-[700px] w-full"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.8, duration: 1.2, ease: "easeOut" }}
         >
-          <Scene3D />
+          <div className="relative w-full h-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto px-4">
+            {/* Decorative earth-tone backdrop */}
+            <div
+              aria-hidden
+              className="absolute inset-6 lg:inset-10 rounded-[2.5rem] bg-accent/15 blur-2xl"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-x-4 sm:inset-x-8 top-1/2 -translate-y-1/2 rounded-[2.5rem] bg-accent/20 rotate-3"
+            />
+            <img
+              src="/potrait_hero.png"
+              alt="Narasingh Jadhav"
+              className="relative w-full h-[92%] mt-[4%] object-cover object-top rounded-[2.5rem] border border-surface-border shadow-2xl animate-float"
+            />
+          </div>
         </motion.div>
       </div>
 

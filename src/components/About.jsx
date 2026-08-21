@@ -107,15 +107,15 @@ export default function About() {
                 <span className="font-mono text-xs mt-4 tracking-widest">N.J.</span>
               </div>
               
-              <img 
-                src="/hero.png" 
-                alt="Narasingh" 
-                className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-80 group-hover:mix-blend-normal group-hover:opacity-100 transition-all duration-500 transform translate-z-10"
+              <img
+                src="/potrait_hero.png"
+                alt="Narasingh"
+                className="absolute inset-0 w-full h-full object-cover object-top transform translate-z-10"
                 style={{ transform: "translateZ(30px)" }}
               />
-              
+
               {/* Highlight overlay */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-accent/10 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-accent/10 pointer-events-none" />
             </motion.div>
           </motion.div>
 
