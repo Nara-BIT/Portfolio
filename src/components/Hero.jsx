@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { FiArrowDown } from "react-icons/fi";
@@ -16,6 +17,15 @@ const child = {
 };
 
 export default function Hero() {
+  const [showScrollHint, setShowScrollHint] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () =>
+      setShowScrollHint(window.scrollY < window.innerHeight * 0.5);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section
       id="hero"
@@ -110,13 +120,17 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — pinned to viewport on desktop, fades out on scroll */}
       <motion.a
         href="#about"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.8 }}
-        className="absolute bottom-8 left-6 lg:left-12 flex items-center gap-3 text-text-muted hover:text-text-primary transition-colors group"
+        animate={{ opacity: showScrollHint ? 1 : 0 }}
+        transition={
+          showScrollHint ? { delay: 2, duration: 0.8 } : { duration: 0.3 }
+        }
+        className={`absolute bottom-8 left-6 lg:left-12 lg:fixed z-20 flex items-center gap-3 text-text-muted hover:text-text-primary transition-colors group ${
+          showScrollHint ? "" : "pointer-events-none"
+        }`}
         data-cursor="pointer"
       >
         <div className="w-10 h-10 rounded-full border border-surface-border flex items-center justify-center group-hover:border-text-primary transition-colors">
