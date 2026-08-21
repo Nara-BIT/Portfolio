@@ -25,45 +25,43 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        initial={{ y: -80 }}
+        initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "py-3 bg-dark/85 backdrop-blur-xl shadow-lg shadow-dark/40"
-            : "py-5 bg-transparent"
+            ? "py-4 bg-surface/80 backdrop-blur-xl border-b border-surface-border/50"
+            : "py-6 bg-transparent"
         }`}
       >
-        <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
           {/* Logo */}
           <a href="#hero" className="relative group" data-cursor="pointer">
-            <span className="font-mono text-accent text-2xl font-bold tracking-tight">
-              &lt;N /&gt;
+            <span className="font-display text-text-primary text-xl md:text-2xl font-bold tracking-tight">
+              Narasingh
             </span>
-            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent transition-all duration-300 group-hover:w-full" />
+            <span className="text-accent ml-1 font-bold">.</span>
           </a>
 
           {/* Desktop links */}
-          <ul className="hidden md:flex items-center gap-1">
-            {navLinks.map((link, i) => (
+          <ul className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => (
               <li key={link.name}>
                 <a
                   href={link.href}
                   data-cursor="pointer"
-                  className="px-4 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-accent transition-colors duration-200"
+                  className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors duration-300 relative group"
                 >
-                  <span className="font-mono text-accent text-xs mr-1">
-                    0{i + 1}.
-                  </span>
                   {link.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-text-primary transition-all duration-300 group-hover:w-full" />
                 </a>
               </li>
             ))}
-            <li>
+            <li className="ml-2">
               <button
                 onClick={handleResumeClick}
                 data-cursor="pointer"
-                className="ml-3 px-4 py-2 rounded border border-accent text-accent text-sm font-mono hover:bg-accent/10 transition-colors duration-200"
+                className="px-5 py-2.5 rounded-full bg-text-primary text-surface text-sm font-semibold hover:bg-accent-dim hover:text-white transition-colors duration-300"
               >
                 Resume
               </button>
@@ -73,7 +71,7 @@ export default function Navbar() {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-accent text-2xl z-50"
+            className="md:hidden text-text-primary text-2xl z-50 transition-transform duration-300 hover:scale-110"
             data-cursor="pointer"
             aria-label="Toggle menu"
           >
@@ -86,43 +84,45 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "tween", duration: 0.3 }}
-            className="fixed inset-0 z-40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 md:hidden bg-surface/95 backdrop-blur-xl flex items-center justify-center"
           >
-            {/* Overlay */}
-            <div
-              className="absolute inset-0 bg-dark/60 backdrop-blur-sm"
-              onClick={() => setMobileOpen(false)}
-            />
-
-            {/* Panel */}
-            <div className="absolute right-0 top-0 bottom-0 w-[70vw] max-w-xs bg-dark-light shadow-2xl flex flex-col items-center justify-center gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ delay: 0.1, duration: 0.4 }}
+              className="flex flex-col items-center gap-8 text-center"
+            >
               {navLinks.map((link, i) => (
-                <a
+                <motion.a
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.1, duration: 0.4 }}
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-lg text-gray-300 hover:text-accent transition-colors"
+                  className="text-3xl font-display font-bold text-text-primary hover:text-accent transition-colors"
                 >
-                  <span className="block font-mono text-accent text-xs mb-1 text-center">
-                    0{i + 1}.
-                  </span>
                   {link.name}
-                </a>
+                </motion.a>
               ))}
-              <button
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + navLinks.length * 0.1, duration: 0.4 }}
                 onClick={(e) => {
                   handleResumeClick(e);
                   setMobileOpen(false);
                 }}
-                className="mt-4 px-6 py-3 rounded border border-accent text-accent font-mono text-sm hover:bg-accent/10 transition-colors"
+                className="mt-4 px-8 py-4 rounded-full bg-text-primary text-surface font-semibold text-lg hover:bg-accent-dim hover:text-white transition-colors"
               >
-                Resume
-              </button>
-            </div>
+                Download Resume
+              </motion.button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

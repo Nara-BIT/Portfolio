@@ -1,131 +1,126 @@
-import { motion } from "framer-motion";
-import { TypeAnimation } from "react-type-animation";
-import Scene3D from "./Scene3D";
-import { FiArrowDown } from "react-icons/fi";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { useRef } from "react";
+import { skills } from "../data/constants";
 
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.3 },
-  },
-};
+export default function About() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
 
-const child = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
-export default function Hero() {
+  // 3D Tilt for image
+  const x = useMotionValue(0);
+  const yImage = useMotionValue(0);
+  
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(yImage);
+  
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    yImage.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    yImage.set(0);
+  };
+
   return (
-    <section
-    id="hero"
-    // Added pb-32 for mobile to create space for the scroll indicator
-    className="relative min-h-[100dvh] flex items-center px-6 pt-20 pb-32 md:pb-0 overflow-hidden"
-    >
-      <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-8 lg:gap-4">
-        {/* Text */}
-        <motion.div
-          className="flex-1 z-10"
-          variants={container}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.p
-            variants={child}
-            className="font-mono text-accent text-sm md:text-base mb-4"
-          >
-            Hi, my name is
-          </motion.p>
+    <section id="about" ref={containerRef} className="py-24 px-6 lg:px-12 relative overflow-hidden">
+      <motion.div style={{ opacity }} className="max-w-7xl mx-auto">
+        
+        <div className="flex flex-col mb-16">
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-4">About Me</h2>
+          <div className="w-full h-px gradient-line" />
+        </div>
 
-          <motion.h1
-            variants={child}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-100 leading-tight"
-          >
-            Narasingh S Jadhav.
-          </motion.h1>
+        <div className="grid lg:grid-cols-[1fr_400px] gap-16 lg:gap-24 items-start">
+          
+          {/* Text Content */}
+          <motion.div style={{ y }} className="space-y-8">
+            <div className="prose prose-lg text-text-secondary leading-relaxed">
+              <p>
+                I'm a Computer Science undergraduate specializing in Data Science at <span className="text-text-primary font-medium">Bangalore Institute of Technology</span>. My journey into programming started with a curiosity for how things work under the hood, and it has evolved into a deep passion for building scalable systems.
+              </p>
+              <p>
+                I am an <span className="text-text-primary font-medium">Aspiring Software Engineer</span> trying to make a significant impact in the landscape of Competitive Programming. I love the thrill of breaking down complex algorithmic challenges and writing efficient, clean code.
+              </p>
+              <p>
+                Whether I'm designing robust backend architectures, orchestrating real-time data pipelines, or fine-tuning AI models, my goal is always the same: to build software that is fast, reliable, and actually useful.
+              </p>
+            </div>
 
-          <motion.div
-            variants={child}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-400 mt-2 h-12"
-          >
-            <TypeAnimation
-              sequence={[
-                "Aspiring Software Engineer.",
-                2000,
-                "MERN Stack Developer.",
-                2000,
-                "Data Engineering Enthusiast.",
-                2000,
-                "Competitive Programmer.",
-                2000,
-              ]}
-              wrapper="span"
-              speed={40}
-              repeat={Infinity}
-            />
+            {/* Skills Pills */}
+            <div>
+              <h3 className="font-mono text-sm text-text-muted uppercase tracking-widest mb-6">Core Technologies</h3>
+              <div className="flex flex-wrap gap-3">
+                {skills.map((skill, i) => (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05, duration: 0.4 }}
+                    key={skill}
+                    className="px-4 py-2 rounded-full text-sm font-medium bg-surface-light border border-surface-border text-text-primary hover:bg-text-primary hover:text-surface hover:border-text-primary transition-all duration-300"
+                  >
+                    {skill}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
-          <motion.p
-            variants={child}
-            className="mt-6 max-w-lg text-gray-400 leading-relaxed text-base md:text-lg"
+          {/* Profile Image with 3D Tilt */}
+          <motion.div 
+            className="relative w-full aspect-[4/5] perspective-1000 group mx-auto max-w-sm lg:max-w-none"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            I'm a Computer Science undergraduate specializing in Data Science at{" "}
-            <span className="text-accent">
-              Bangalore Institute of Technology
-            </span>
-            . I train AI & ML models ,practice DevOps ,design data pipelines, build scalable web applications and love
-            solving algorithmic challenges.
-          </motion.p>
-
-          <motion.div variants={child} className="flex flex-wrap gap-4 mt-6 md:mt-8">
-            <a
-              href="#projects"
-              data-cursor="pointer"
-              className="group relative px-7 py-3 rounded border border-accent text-accent font-mono text-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(100,255,218,0.3)]"
+            <motion.div
+              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="w-full h-full relative rounded-2xl overflow-hidden glass border-surface-border cursor-crosshair"
             >
-              <span className="absolute inset-0 bg-accent/10 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-              <span className="relative">View My Work</span>
-            </a>
-            <a
-              href="#contact"
-              data-cursor="pointer"
-              className="px-7 py-3 rounded bg-accent/10 text-accent font-mono text-sm border border-transparent hover:border-accent transition-all duration-300"
-            >
-              Get In Touch
-            </a>
+              {/* Fallback pattern if no image */}
+              <div className="absolute inset-0 bg-gradient-to-br from-surface-light to-surface flex flex-col items-center justify-center text-surface-border">
+                <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span className="font-mono text-xs mt-4 tracking-widest">N.J.</span>
+              </div>
+              
+              <img 
+                src="/hero.png" 
+                alt="Narasingh" 
+                className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-80 group-hover:mix-blend-normal group-hover:opacity-100 transition-all duration-500 transform translate-z-10"
+                style={{ transform: "translateZ(30px)" }}
+              />
+              
+              {/* Highlight overlay */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-accent/10 pointer-events-none" />
+            </motion.div>
           </motion.div>
-        </motion.div>
 
-        {/* 3D element (desktop) */}
-        <motion.div
-          className="flex-1 hidden lg:block"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-        >
-          <Scene3D />
-        </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.a
-        href="#about"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.5 }}
-        // Changed 'flex' to 'hidden md:flex'
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-gray-500 hover:text-accent transition-colors"
-        data-cursor="pointer"
-      >
-        <span className="text-xs font-mono">scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
-          <FiArrowDown className="text-lg" />
-        </motion.div>
-      </motion.a>
+        </div>
+      </motion.div>
     </section>
   );
 }

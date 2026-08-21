@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="16" fill="#0a192f"/>
+  <rect width="100" height="100" rx="16" fill="#F7F3EC"/>
   <text x="50" y="65" font-family="monospace" font-size="48" font-weight="bold"
-        fill="#64ffda" text-anchor="middle">N</text>
+        fill="#6F8060" text-anchor="middle">N</text>
   <rect x="10" y="10" width="80" height="80" rx="12" fill="none"
-        stroke="#64ffda" stroke-width="2" opacity="0.5"/>
+        stroke="#6F8060" stroke-width="2" opacity="0.5"/>
 </svg>

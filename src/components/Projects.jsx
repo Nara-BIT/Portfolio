@@ -1,249 +1,154 @@
-import { motion } from "framer-motion";
-import SectionHeading from "./SectionHeading";
+import { useState } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { projects } from "../data/constants";
-import { FiGithub, FiExternalLink } from "react-icons/fi";
-import { FaFolder } from "react-icons/fa";
+import { FiGithub, FiArrowDown } from "react-icons/fi";
 
-const cardVariant = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.12, duration: 0.5, ease: "easeOut" },
-  }),
-};
+const INITIAL_PROJECTS_COUNT = 3;
 
-/* Language color mapping */
-const langColor = {
-  JavaScript: "#f1e05a",
-  TypeScript: "#3178c6",
-  Python: "#3572A5",
-  "C++": "#f34b7d",
-  Java: "#b07219",
-  HTML: "#e34c26",
-  CSS: "#563d7c",
-};
+// 3D Tilt Card Component
+function ProjectCard({ project, index }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+  
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
 
-export default function Projects() {
-  // Separate featured (large cards) and others (small cards)
-  const featured = projects.filter((p) => p.featured);
-  const others = projects.filter((p) => !p.featured);
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
-    <section id="projects" className="py-24 px-6">
-      <div className="max-w-5xl mx-auto">
-        <SectionHeading number="03" title="Projects" />
-
-        {/* ─── Featured Projects (large cards) ─── */}
-        <div className="space-y-8 mb-12">
-          {featured.map((project, i) => (
-            <motion.div
-              key={project.id}
-              custom={i}
-              variants={cardVariant}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              onClick={() => window.open(project.github, "_blank", "noopener,noreferrer")}
-              data-cursor="pointer"
-              className="group cursor-pointer relative rounded-xl p-6 md:p-8 bg-dark-light border border-dark-lighter hover:border-accent/30 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-            >
-              {/* Hover glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-              <div className="relative z-10">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <FaFolder className="text-accent text-2xl flex-shrink-0" />
-                    <div>
-                      <p className="font-mono text-accent text-xs mb-1">
-                        Featured Project
-                      </p>
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-200 group-hover:text-accent transition-colors duration-300">
-                        {project.name}
-                      </h3>
-                    </div>
-                  </div>
-
-                  {/* Links */}
-                  <div className="flex items-center gap-3 text-gray-400">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()} /* Prevents double click bug */
-                        className="hover:text-accent transition-colors text-lg"
-                        aria-label="GitHub"
-                      >
-                        <FiGithub />
-                      </a>
-                    )}
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="hover:text-accent transition-colors text-lg"
-                        aria-label="Live Demo"
-                      >
-                        <FiExternalLink />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-gray-400 leading-relaxed mb-5 text-sm md:text-base">
-                  {project.description}
-                </p>
-
-                {/* Tech stack */}
-                <div className="flex flex-wrap gap-2">
-                  {project.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 rounded-full text-xs font-mono bg-dark border border-dark-lighter text-accent/80 group-hover:border-accent/50 group-hover:text-accent transition-colors duration-200"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Language indicator */}
-                <div className="flex items-center gap-2 mt-4 text-xs text-gray-500">
-                  <span
-                    className="w-3 h-3 rounded-full inline-block"
-                    style={{
-                      backgroundColor: langColor[project.language] || "#8892b0",
-                    }}
-                  />
-                  <span>{project.language}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.7, delay: (index % INITIAL_PROJECTS_COUNT) * 0.1 }}
+      className="perspective-1000 w-full"
+    >
+      <motion.div
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={() => window.open(project.github, "_blank", "noopener,noreferrer")}
+        className="w-full glass rounded-3xl overflow-hidden cursor-pointer group hover:border-surface-border transition-colors duration-500"
+      >
+        {/* Project Banner Area - Colorful Gradient */}
+        <div className={`w-full h-48 md:h-64 lg:h-80 bg-gradient-to-br ${project.gradient} relative overflow-hidden flex items-center justify-center transform translate-z-10`}>
+          {/* Subtle noise/texture over gradient */}
+          <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]" />
+          
+          <motion.h3 
+            className="text-white text-3xl md:text-5xl font-display font-black text-center px-6 opacity-80 mix-blend-overlay group-hover:opacity-100 transition-opacity duration-300 transform"
+            style={{ transform: "translateZ(40px)" }}
+          >
+            {project.name}
+          </motion.h3>
         </div>
 
-        {/* ─── Other Projects (grid cards) ─── */}
-        {others.length > 0 && (
-          <>
-            <motion.h3
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-xl font-semibold text-gray-300 text-center mb-8"
-            >
-              Other Noteworthy Projects
-            </motion.h3>
-
-            <div className="grid sm:grid-cols-2 gap-5">
-              {others.map((project, i) => (
-                <motion.div
-                  key={project.id}
-                  custom={i + featured.length}
-                  variants={cardVariant}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  onClick={() => window.open(project.github, "_blank", "noopener,noreferrer")}
-                  data-cursor="pointer"
-                  className="group cursor-pointer flex flex-col justify-between rounded-xl p-6 bg-dark-light border border-dark-lighter hover:border-accent/30 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
-                >
-                  {/* Hover glow */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                  <div className="relative z-10">
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-4">
-                      <FaFolder className="text-accent text-2xl" />
-                      <div className="flex items-center gap-3 text-gray-400">
-                        {project.github && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="hover:text-accent transition-colors"
-                            aria-label="GitHub"
-                          >
-                            <FiGithub />
-                          </a>
-                        )}
-                        {project.live && (
-                          <a
-                            href={project.live}
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="hover:text-accent transition-colors"
-                            aria-label="Live Demo"
-                          >
-                            <FiExternalLink />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold text-gray-200 group-hover:text-accent transition-colors duration-300 mb-2">
-                      {project.name}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-sm text-gray-500 mb-4 leading-relaxed">
-                      {project.description}
-                    </p>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="relative z-10 pt-4 border-t border-dark-lighter mt-auto">
-                    <div className="flex flex-wrap gap-2">
-                      {project.techStack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="text-xs font-mono text-gray-500"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-600">
-                      <span
-                        className="w-2.5 h-2.5 rounded-full inline-block"
-                        style={{
-                          backgroundColor:
-                            langColor[project.language] || "#8892b0",
-                        }}
-                      />
-                      <span>{project.language}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+        {/* Project Details Area */}
+        <div className="p-8 md:p-10 bg-surface-light transform translate-z-0">
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold text-text-primary mb-2 group-hover:text-accent transition-colors duration-300">
+                {project.name}
+              </h3>
+              <p className="text-text-secondary leading-relaxed">
+                {project.description}
+              </p>
             </div>
-          </>
-        )}
+            
+            <div className="flex flex-col items-start md:items-end gap-4 shrink-0">
+              <span className="font-mono text-sm text-text-muted">{project.year}</span>
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="w-12 h-12 rounded-full border border-surface-border flex items-center justify-center text-text-primary hover:bg-text-primary hover:text-surface hover:border-text-primary transition-all duration-300"
+                aria-label="GitHub Repository"
+              >
+                <FiGithub className="text-xl" />
+              </a>
+            </div>
+          </div>
 
-        {/* View more on GitHub */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-10"
-        >
-          <a
-            href="https://github.com/Nara-BIT?tab=repositories"
-            target="_blank"
-            rel="noreferrer"
-            data-cursor="pointer"
-            className="inline-block px-8 py-3 rounded border border-accent text-accent font-mono text-sm hover:bg-accent/10 transition-all duration-300"
+          {/* Tech Stack */}
+          <div className="flex flex-wrap gap-2 pt-6 border-t border-surface-border">
+            {project.techStack.map((tech) => (
+              <span
+                key={tech}
+                className="text-xs font-mono text-text-muted uppercase tracking-wider"
+              >
+                {tech}
+                <span className="mx-2 opacity-50 last:hidden">•</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export default function Projects() {
+  const [visibleCount, setVisibleCount] = useState(INITIAL_PROJECTS_COUNT);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 3, projects.length));
+  };
+
+  const hasMore = visibleCount < projects.length;
+
+  return (
+    <section id="projects" className="py-24 px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col mb-16">
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-4">Selected Work</h2>
+          <div className="w-full h-px gradient-line" />
+        </div>
+
+        <div className="flex flex-col gap-12 md:gap-16">
+          <AnimatePresence mode="popLayout">
+            {projects.slice(0, visibleCount).map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {hasMore && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-center mt-16"
           >
-            View All on GitHub
-          </a>
-        </motion.div>
+            <button
+              onClick={handleLoadMore}
+              data-cursor="pointer"
+              className="group flex flex-col items-center gap-3 text-text-muted hover:text-text-primary transition-colors duration-300"
+            >
+              <span className="font-mono text-sm uppercase tracking-widest">Load More</span>
+              <div className="w-12 h-12 rounded-full border border-surface-border flex items-center justify-center group-hover:border-text-primary transition-colors duration-300">
+                <FiArrowDown className="text-lg group-hover:translate-y-1 transition-transform duration-300" />
+              </div>
+            </button>
+          </motion.div>
+        )}
       </div>
     </section>
   );

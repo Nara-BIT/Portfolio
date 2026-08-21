@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import SectionHeading from "./SectionHeading";
 import { leetcodeStats, codeforcesStats } from "../data/constants";
 import { SiLeetcode } from "react-icons/si";
 import { FaCode } from "react-icons/fa";
@@ -36,21 +35,19 @@ function Counter({ target, duration = 2000 }) {
 }
 
 /* ─── Difficulty Bar ─── */
-function DiffBar({ label, value, total, color }) {
+function DiffBar({ label, value, total, colorClass }) {
   const pct = Math.round((value / total) * 100);
   return (
     <div>
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-gray-400">{label}</span>
-        <span className="font-mono text-gray-300">
-          {value}{" "}
-          <span className="text-gray-600 text-xs">/ {total}</span>
+      <div className="flex justify-between text-sm mb-2">
+        <span className="text-text-secondary font-medium">{label}</span>
+        <span className="font-mono text-text-primary">
+          {value} <span className="text-text-muted text-xs">/ {total}</span>
         </span>
       </div>
-      <div className="h-2 rounded-full bg-dark-lighter overflow-hidden">
+      <div className="h-1.5 rounded-full bg-surface-lighter overflow-hidden">
         <motion.div
-          className="h-full rounded-full"
-          style={{ backgroundColor: color }}
+          className={`h-full rounded-full ${colorClass}`}
           initial={{ width: 0 }}
           whileInView={{ width: `${pct}%` }}
           viewport={{ once: true }}
@@ -65,159 +62,122 @@ export default function CodingProfiles() {
   const { total, easy, medium, hard, rating, profile } = leetcodeStats;
 
   return (
-    <section id="coding" className="py-24 px-6">
-      <div className="max-w-5xl mx-auto">
-        <SectionHeading number="04" title="Coding Profiles" />
+    <section id="coding" className="py-24 px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col mb-16">
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-4">Competitive Programming</h2>
+          <div className="w-full h-px gradient-line" />
+        </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {/* ─── LeetCode Card ─── */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="rounded-xl p-6 bg-dark-light border border-dark-lighter hover:border-accent/30 transition-colors duration-300"
+            transition={{ duration: 0.6 }}
+            className="glass p-8 md:p-12 rounded-3xl relative overflow-hidden group hover:border-surface-border transition-colors duration-500 flex flex-col"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <SiLeetcode className="text-3xl text-[#ffa116]" />
-              <div>
-                <h3 className="text-lg font-semibold text-gray-200">
-                  LeetCode
-                </h3>
-                <p className="text-xs text-gray-500 font-mono">
-                  @BrawlyNara007
-                </p>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-orange-500/10 transition-colors duration-500 pointer-events-none" />
+            
+            <div className="relative z-10 flex-1">
+              <div className="flex items-center gap-4 mb-10">
+                <div className="w-16 h-16 rounded-2xl bg-surface flex items-center justify-center border border-surface-border">
+                  <SiLeetcode className="text-3xl text-orange-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-text-primary">LeetCode</h3>
+                  <p className="text-sm text-text-muted font-mono mt-1">@BrawlyNara007</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mb-10 pb-10 border-b border-surface-border">
+                <div>
+                  <p className="text-5xl md:text-6xl font-display font-black text-text-primary mb-2">
+                    <Counter target={total} />
+                  </p>
+                  <p className="text-sm font-mono text-text-muted uppercase tracking-widest">Problems Solved</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-4xl md:text-5xl font-display font-black text-orange-400 mb-2">
+                    {rating}
+                  </p>
+                  <p className="text-sm font-mono text-text-muted uppercase tracking-widest">Peak Rating</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <DiffBar label="Easy" value={easy} total={total} colorClass="bg-teal-400" />
+                <DiffBar label="Medium" value={medium} total={total} colorClass="bg-yellow-400" />
+                <DiffBar label="Hard" value={hard} total={total} colorClass="bg-red-500" />
               </div>
             </div>
 
-            <div className="flex items-center justify-around mb-6">
-              <div className="text-center">
-                <p className="text-4xl font-extrabold text-accent">
-                  <Counter target={total} />
-                </p>
-                <p className="text-xs text-gray-500 mt-1">Problems Solved</p>
-              </div>
-              <div className="w-px h-12 bg-dark-lighter" />
-              <div className="text-center">
-                <p className="text-4xl font-extrabold text-[#ffa116]">
-                  {rating}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">Peak Contest Rating</p>
-              </div>
+            <div className="mt-10 pt-6">
+              <a
+                href={profile}
+                target="_blank"
+                rel="noreferrer"
+                data-cursor="pointer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary hover:text-orange-600 transition-colors"
+              >
+                View Profile <span className="text-lg">→</span>
+              </a>
             </div>
-
-            <div className="space-y-3">
-              <DiffBar label="Easy" value={easy} total={total} color="#00b8a3" />
-              <DiffBar label="Medium" value={medium} total={total} color="#ffc01e" />
-              <DiffBar label="Hard" value={hard} total={total} color="#ef4743" />
-            </div>
-
-            <a
-              href={profile}
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="pointer"
-              className="mt-6 block text-center text-sm font-mono text-accent border border-accent/30 rounded py-2 hover:bg-accent/10 transition-colors"
-            >
-              View LeetCode Profile →
-            </a>
           </motion.div>
 
           {/* ─── Codeforces Card ─── */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="rounded-xl p-6 bg-dark-light border border-dark-lighter hover:border-accent/30 transition-colors duration-300 flex flex-col"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="glass p-8 md:p-12 rounded-3xl relative overflow-hidden group hover:border-surface-border transition-colors duration-500 flex flex-col"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <FaCode className="text-3xl text-[#1f8acb]" />
-              <div>
-                <h3 className="text-lg font-semibold text-gray-200">
-                  Codeforces
-                </h3>
-                <p className="text-xs text-gray-500 font-mono">
-                  @{codeforcesStats.handle}
-                </p>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-500/10 transition-colors duration-500 pointer-events-none" />
+            
+            <div className="relative z-10 flex-1">
+              <div className="flex items-center gap-4 mb-10">
+                <div className="w-16 h-16 rounded-2xl bg-surface flex items-center justify-center border border-surface-border">
+                  <FaCode className="text-3xl text-blue-500" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-text-primary">Codeforces</h3>
+                  <p className="text-sm text-text-muted font-mono mt-1">@{codeforcesStats.handle}</p>
+                </div>
               </div>
+
+              <h4 className="text-xl font-bold text-text-primary mb-6">Algorithm Focus</h4>
+              
+              <ul className="space-y-5 text-text-secondary">
+                {[
+                  "Active on Codeforces — solving Div-2 & Div-3 problem sets",
+                  "Regular participant in Codeforces Rounds and educational contests",
+                  "Strong grasp of Data Structures: Trees, Graphs, Heaps, Segment Trees",
+                  "Algorithm proficiency: DP, Greedy, Binary Search, BFS / DFS",
+                  "Consistent daily problem-solving practice"
+                ].map((item) => (
+                  <li key={item} className="flex gap-4 items-start text-base">
+                    <span className="text-blue-500 mt-1 flex-shrink-0 text-xs">◆</span>
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <ul className="space-y-3 text-gray-400 flex-1">
-              {[
-                "Active on Codeforces — solving Div-2 & Div-3 problem sets",
-                "Regular participant in Codeforces Rounds and educational contests",
-                "Strong grasp of Data Structures: Trees, Graphs, Heaps, Segment Trees",
-                "Algorithm proficiency: DP, Greedy, Binary Search, BFS / DFS",
-                "Consistent daily problem-solving practice",
-                "Strong analytical and logical reasoning skills",
-              ].map((item) => (
-                <li key={item} className="flex gap-2 text-sm">
-                  <span className="text-accent mt-0.5 flex-shrink-0">▹</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="mt-10 pt-6">
               <a
                 href={codeforcesStats.profile}
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="pointer"
-                className="block text-center text-sm font-mono text-accent border border-accent/30 rounded py-2 hover:bg-accent/10 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary hover:text-blue-600 transition-colors"
               >
-                Codeforces Profile →
-              </a>
-              <a
-                href={leetcodeStats.profile}
-                target="_blank"
-                rel="noreferrer"
-                data-cursor="pointer"
-                className="block text-center text-sm font-mono text-[#1f8acb] border border-[#1f8acb]/30 rounded py-2 hover:bg-[#1f8acb]/10 transition-colors"
-              >
-                LeetCode Contests →
+                View Profile <span className="text-lg">→</span>
               </a>
             </div>
           </motion.div>
         </div>
-
-        {/* ─── Achievements Banner ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-8 rounded-xl p-6 bg-dark-light border border-dark-lighter"
-        >
-          <h3 className="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
-            <span className="text-accent">🏆</span> Achievements
-          </h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              {
-                title: "400+ Problems",
-                desc: "Solved on LeetCode with peak contest rating of 1551",
-              },
-              {
-                title: "PWxRIFT 2026 Hackathon",
-                desc: "Built a self-healing CI/CD agent in 24-hour competitive sprint",
-              },
-              {
-                title: "ByteQuest Finalist",
-                desc: "Qualified for final round in ByteQuest Vibecoding Hackathon (Jan 2026)",
-              },
-            ].map(({ title, desc }) => (
-              <div
-                key={title}
-                className="p-4 rounded-lg bg-dark border border-dark-lighter hover:border-accent/20 transition-colors"
-              >
-                <p className="font-semibold text-accent text-sm mb-1">{title}</p>
-                <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );

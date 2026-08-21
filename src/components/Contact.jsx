@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import SectionHeading from "./SectionHeading";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -20,13 +19,11 @@ export default function Contact() {
 
     setSending(true);
 
-    const subject = encodeURIComponent(
-      `Portfolio Contact from ${form.name}`
-    );
+    const subject = encodeURIComponent(`Portfolio Contact from ${form.name}`);
     const body = encodeURIComponent(
       `${form.message}\n\n— ${form.name} (${form.email})`
     );
-    window.location.href = `mailto:narasinghjadhav303@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:narasinghjadhav03@gmail.com?subject=${subject}&body=${body}`;
 
     setTimeout(() => {
       toast.success("Opening your email client!");
@@ -36,86 +33,86 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 px-6">
-      <div className="max-w-2xl mx-auto text-center">
-        <SectionHeading number="06" title="Get In Touch" />
+    <section id="contact" className="py-24 px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col mb-16">
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-4 text-center">Let's Connect</h2>
+          <div className="w-24 h-1 bg-text-primary mx-auto mt-4" />
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-gray-400 leading-relaxed mb-10"
-        >
-          I'm always open to new opportunities, collaborations, or just a
-          friendly hello. Whether you have a question or simply want to
-          connect — my inbox is open!
-        </motion.p>
+        <div className="max-w-2xl mx-auto">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-text-secondary text-center text-lg leading-relaxed mb-12"
+          >
+            I'm currently looking for new opportunities. Whether you have a question, a project idea, or just want to say hi, I'll try my best to get back to you!
+          </motion.p>
 
-        <motion.form
-          onSubmit={onSubmit}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="space-y-5 text-left"
-        >
-          <div className="grid sm:grid-cols-2 gap-5">
+          <motion.form
+            onSubmit={onSubmit}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6 glass p-8 md:p-10 rounded-3xl"
+          >
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-xs font-mono text-text-muted uppercase tracking-widest mb-2">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={onChange}
+                  placeholder="John Doe"
+                  className="w-full px-5 py-4 rounded-xl bg-surface border border-surface-border text-text-primary placeholder-text-muted focus:border-text-primary focus:outline-none transition-colors duration-300"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-mono text-text-muted uppercase tracking-widest mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={onChange}
+                  placeholder="john@example.com"
+                  className="w-full px-5 py-4 rounded-xl bg-surface border border-surface-border text-text-primary placeholder-text-muted focus:border-text-primary focus:outline-none transition-colors duration-300"
+                />
+              </div>
+            </div>
+
             <div>
-              <label className="block text-sm text-gray-400 mb-1 font-mono">
-                Name
+              <label className="block text-xs font-mono text-text-muted uppercase tracking-widest mb-2">
+                Message
               </label>
-              <input
-                type="text"
-                name="name"
-                value={form.name}
+              <textarea
+                name="message"
+                rows={5}
+                value={form.message}
                 onChange={onChange}
-                placeholder="Your name"
-                className="w-full px-4 py-3 rounded-lg bg-dark-light border border-dark-lighter text-gray-200 placeholder-gray-600 focus:border-accent focus:outline-none transition-colors duration-200"
+                placeholder="What's on your mind?"
+                className="w-full px-5 py-4 rounded-xl bg-surface border border-surface-border text-text-primary placeholder-text-muted focus:border-text-primary focus:outline-none transition-colors duration-300 resize-none"
               />
             </div>
-            <div>
-              <label className="block text-sm text-gray-400 mb-1 font-mono">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={onChange}
-                placeholder="you@example.com"
-                className="w-full px-4 py-3 rounded-lg bg-dark-light border border-dark-lighter text-gray-200 placeholder-gray-600 focus:border-accent focus:outline-none transition-colors duration-200"
-              />
-            </div>
-          </div>
 
-          <div>
-            <label className="block text-sm text-gray-400 mb-1 font-mono">
-              Message
-            </label>
-            <textarea
-              name="message"
-              rows={5}
-              value={form.message}
-              onChange={onChange}
-              placeholder="What would you like to say?"
-              className="w-full px-4 py-3 rounded-lg bg-dark-light border border-dark-lighter text-gray-200 placeholder-gray-600 focus:border-accent focus:outline-none transition-colors duration-200 resize-none"
-            />
-          </div>
-
-          <div className="text-center pt-2">
-            <button
-              type="submit"
-              disabled={sending}
-              data-cursor="pointer"
-              className="group relative px-10 py-3 rounded border border-accent text-accent font-mono text-sm overflow-hidden hover:shadow-[0_0_25px_rgba(100,255,218,0.25)] transition-shadow duration-300 disabled:opacity-50"
-            >
-              <span className="absolute inset-0 bg-accent/10 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-              <span className="relative">
+            <div className="pt-4 text-center">
+              <button
+                type="submit"
+                disabled={sending}
+                data-cursor="pointer"
+                className="px-10 py-4 rounded-full bg-text-primary text-surface font-semibold hover:bg-accent-dim hover:text-white transition-colors duration-300 disabled:opacity-50 w-full sm:w-auto"
+              >
                 {sending ? "Sending..." : "Send Message"}
-              </span>
-            </button>
-          </div>
-        </motion.form>
+              </button>
+            </div>
+          </motion.form>
+        </div>
       </div>
     </section>
   );
