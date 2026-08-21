@@ -248,3 +248,25 @@ export const blog = {
   description:
     "Fiction stories exploring sci-fi worlds and epic narratives — a creative writing hobby.",
 };
+
+/* ─── About Flip Gallery ───
+   Auto-loads every image in src/assets/flip_image — just drop files in. */
+const flipModules = import.meta.glob(
+  "../assets/flip_image/*.{png,jpg,jpeg,webp,avif,gif,svg}",
+  { eager: true, query: "?url", import: "default" }
+);
+
+export const flipImages = Object.keys(flipModules)
+  .sort()
+  .map((path) => {
+    const name = path
+      .split("/")
+      .pop()
+      .replace(/\.[^.]+$/, "");
+    return {
+      src: flipModules[path],
+      alt: name
+        .replace(/[_-]+/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
+    };
+  });

@@ -1,6 +1,13 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { useRef } from "react";
-import { skills } from "../data/constants";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+  useMotionTemplate,
+} from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { skills, flipImages } from "../data/constants";
 
 export default function About() {
   const containerRef = useRef(null);
@@ -12,31 +19,59 @@ export default function About() {
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
-  // 3D Tilt for image
-  const x = useMotionValue(0);
-  const yImage = useMotionValue(0);
-  
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(yImage);
-  
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  /* ─── Flip gallery state ─── */
+  const [flipIndex, setFlipIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [instant, setInstant] = useState(false);
+
+  const currentImage = flipImages[flipIndex];
+  const nextImage = flipImages[(flipIndex + 1) % flipImages.length];
+
+  const handleFlip = () => setIsFlipped(true);
+
+  /* After the flip animation finishes: silently advance to the next
+     image and reset rotation without animating (invisible swap). */
+  const handleFlipEnd = (e) => {
+    if (e.propertyName !== "transform" || !isFlipped) return;
+    setInstant(true);
+    setFlipIndex((i) => (i + 1) % flipImages.length);
+    setIsFlipped(false);
+  };
+
+  useEffect(() => {
+    if (!instant) return;
+    const raf = requestAnimationFrame(() =>
+      requestAnimationFrame(() => setInstant(false))
+    );
+    return () => cancelAnimationFrame(raf);
+  }, [instant]);
+
+  /* ─── 3D hover tilt + glare ─── */
+  const [hovered, setHovered] = useState(false);
+  const sx = useMotionValue(0);
+  const sy = useMotionValue(0);
+  const rotateX = useSpring(useTransform(sy, [-0.5, 0.5], [12, -12]), {
+    stiffness: 250,
+    damping: 25,
+  });
+  const rotateY = useSpring(useTransform(sx, [-0.5, 0.5], [-12, 12]), {
+    stiffness: 250,
+    damping: 25,
+  });
+  const glareX = useTransform(sx, (v) => (v + 0.5) * 100);
+  const glareY = useTransform(sy, (v) => (v + 0.5) * 100);
+  const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.35), transparent 55%)`;
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    yImage.set(yPct);
+    sx.set((e.clientX - rect.left) / rect.width - 0.5);
+    sy.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
   const handleMouseLeave = () => {
-    x.set(0);
-    yImage.set(0);
+    setHovered(false);
+    sx.set(0);
+    sy.set(0);
   };
 
   return (
@@ -84,40 +119,75 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* Profile Image with 3D Tilt */}
-          <motion.div 
-            className="relative w-full aspect-[4/5] perspective-1000 group mx-auto max-w-sm lg:max-w-none"
+          {/* Flip Gallery — hover to levitate & tilt, click to flip */}
+          {flipImages.length > 0 && (
+          <motion.div
+            className="relative w-full aspect-[4/5] mx-auto max-w-sm lg:max-w-none"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <motion.div
-              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              className="w-full h-full relative rounded-2xl overflow-hidden glass border-surface-border cursor-crosshair"
-            >
-              {/* Fallback pattern if no image */}
-              <div className="absolute inset-0 bg-gradient-to-br from-surface-light to-surface flex flex-col items-center justify-center text-surface-border">
-                <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span className="font-mono text-xs mt-4 tracking-widest">N.J.</span>
-              </div>
-              
-              <img
-                src="/potrait_hero.png"
-                alt="Narasingh"
-                className="absolute inset-0 w-full h-full object-cover object-top transform translate-z-10"
-                style={{ transform: "translateZ(30px)" }}
-              />
+            <div className="perspective-1000 h-full">
+              <motion.div
+                className="h-full"
+                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                animate={{
+                  y: hovered ? -14 : 0,
+                  scale: hovered ? 1.03 : 1,
+                }}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  className={`w-full h-full relative rounded-2xl overflow-hidden glass border-surface-border transition-shadow duration-300 ${
+                    hovered ? "shadow-2xl" : "shadow-md"
+                  }`}
+                  data-cursor="pointer"
+                  onClick={handleFlip}
+                  role="button"
+                  aria-label="Flip to next photo"
+                >
+                  <div className="perspective-1000 absolute inset-0">
+                    <div
+                      className={`flip-card ${isFlipped ? "is-flipped" : ""} ${
+                        instant ? "no-anim" : ""
+                      }`}
+                      onTransitionEnd={handleFlipEnd}
+                    >
+                      <img
+                        className="flip-face"
+                        src={currentImage.src}
+                        alt={currentImage.alt}
+                        draggable="false"
+                      />
+                      <img
+                        className="flip-face flip-face-back"
+                        src={nextImage.src}
+                        alt={nextImage.alt}
+                        draggable="false"
+                      />
+                    </div>
+                  </div>
 
-              {/* Highlight overlay */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-accent/10 pointer-events-none" />
-            </motion.div>
+                  {/* Cursor-tracked glare */}
+                  <motion.div
+                    className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${
+                      hovered ? "opacity-100" : "opacity-0"
+                    }`}
+                    style={{ background: glare }}
+                  />
+
+                  <span className="absolute bottom-4 inset-x-0 text-center font-mono text-[10px] uppercase tracking-widest text-white/80 pointer-events-none select-none">
+                    Click to flip
+                  </span>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
+          )}
 
         </div>
       </motion.div>

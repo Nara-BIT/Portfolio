@@ -101,3 +101,31 @@ section {
 .preserve-3d {
   transform-style: preserve-3d;
 }
+
+/* ─── Flip card (About gallery) ─── */
+.flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.flip-card.is-flipped {
+  transform: rotateY(180deg);
+}
+.flip-card.no-anim {
+  transition: none;
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  user-select: none;
+}
+.flip-face-back {
+  transform: rotateY(180deg);
+}
