@@ -72,7 +72,7 @@ export const skills = [
 export const experience = {
   role: "Software Engineer Intern",
   company: "Tattvira Private Ltd.",
-  period: "2025",
+  period: "2026",
   teamLead: "Team OS",
   highlights: [
     "Built a real-time CCTV monitoring dashboard in React and Tauri, delivering live feed display, alert visualization, and incident management across connected cameras.",
